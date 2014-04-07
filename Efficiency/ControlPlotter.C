@@ -77,12 +77,12 @@ void ControlPlotter::config()
 void ControlPlotter::fillTight(TriggeredMuon & muon) 
 {
   
-  float nTrkHits = muon.mu_->tr_validhits.at(muon.imu_);
-  float chi2     = muon.mu_->normchi2.at(muon.imu_);
-
+  float nTrkHits = muon.my_mu->tr_validhits.at(muon.my_imu);
+  float chi2     = muon.my_mu->normchi2.at(muon.my_imu);
+  
   hTH1_["hTrkHits"]->Fill(nTrkHits);
   hTH1_["hChi2"]->Fill(chi2);
-
+  
 }
 
 void ControlPlotter::fillTrigger(TriggeredMuon & muon) 
@@ -90,20 +90,20 @@ void ControlPlotter::fillTrigger(TriggeredMuon & muon)
   
   float dPhi  = muon.deltaPhi();
   float dEta  = muon.deltaEta();
-
+  
   float eta   = muon.my_gmt->eta(muon.my_igmt);
-
+  
   hTH1_["hGmtDeltaPhi"]->Fill(dPhi);
   hTH1_["hGmtDeltaEta"]->Fill(dEta);
 
   hTH1_["hGmtDeltaPhi"]->Fill(eta,dPhi);
   hTH1_["hGmtDeltaEta"]->Fill(eta,dEta);
-
+  
 }
 
 void ControlPlotter::plotAndSave() 
 { 
-
+  
   setTDRStyle();
   gStyle->SetOptTitle(0);
 
