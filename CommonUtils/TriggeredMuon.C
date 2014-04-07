@@ -41,7 +41,7 @@ public :
     float dPhiBarrel = acos(cos(my_gmt->Phi.at(my_igmt) - my_mu->sa_phi_mb2.at(my_imu)));
     float dPhiEndcap = acos(cos(my_mu->eta.at(my_imu) > 0 ? 
 				my_gmt->Phi.at(my_igmt) - my_mu->sa_phi_me2_p.at(my_imu) :
-				my_gmt->Phi.at(my_igmt) - my_mu->sa_phi_me2_m.at(my_imu) 
+				my_gmt->Phi.at(my_igmt) - my_mu->sa_phi_me2_n.at(my_imu) 
 				));
 
     float dPhi = fabs(dPhiBarrel) <= fabs(dPhiEndcap) ?
@@ -53,7 +53,7 @@ public :
   float deltaEta() const
   { 
     return my_gmt != 0 && my_mu != 0 ? 
-           my_gmt->Eta.at(my_gmt) - my_mu->eta.at(my_imu) : 999. ;
+           my_gmt->Eta.at(my_igmt) - my_mu->eta.at(my_imu) : 999. ;
   }
 
   bool hasGmt() const

@@ -64,8 +64,6 @@ void EfficiencyPlotter::config()
     string title = name + ";tight muon p_{t} [GeV/c];efficiency";
     hTH1F_["hGmtPtVsQual"] = new TH2F(name.c_str(),name.c_str(),60,0.5,60.5,7,0.5,7.5);
 
-    const char *etaTags[7] = { "", "Fine", "Coarse", "1", "2", "3", "4" };
-
     name  = baseName_ + "_hEffVsPt";
     histos_["hEffVsPt"] = new TEfficiency(name.c_str(),title.c_str(),60,0.5,60.5);
 
@@ -73,8 +71,8 @@ void EfficiencyPlotter::config()
     title = name + ";tight muon #eta;efficiency";
     histos_["hEffVsEta"] = new TEfficiency(name.c_str(),title.c_str(),56,-1.05,1.05);
 
-    name  = (baseName_ + "_hGmtEtaVsQual" + tag.str());
-    hTH1F_["hGmtEtaVsQual" + tag.str()] = new TH2F(name.c_str(),name.c_str(),56,-1.05,1.05,7,0.5,7.5);
+    name  = (baseName_ + "_hGmtEtaVsQual");
+    hTH1F_["hGmtEtaVsQual"] = new TH2F(name.c_str(),name.c_str(),56,-1.05,1.05,7,0.5,7.5);
 
     name  = (baseName_ + "_hEffVsPhi");
     title = name + ";tight muon #phi [rad];efficiency";
@@ -107,7 +105,7 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
 
   // int  nVtx  = vtx ? vtx->nVtx : 0;
 
-  bool hasTrigger = muon->hasDtTriggerMatch() && 
+  bool hasTrigger = muon->hasTriggerMatch() && 
     ((muon->my_gmt->Pt.at(muon->my_igmt)) +0.01 > minPt_);
 
   
@@ -213,8 +211,7 @@ void EfficiencyPlotter::plotAndSave()
 
   TH1 const *hEffVsEtaTotal = histos_["hEffVsEta"]->GetTotalHistogram(); 
 
-  THStack * hEffvsEtaStack = new THStack(("hEffvsEtaStack").c_str(), 
-					 ("hEffvsEtaStack").c_str());
+  THStack * hEffvsEtaStack = new THStack("hEffvsEtaStack","hEffvsEtaStack");
   for(int ybin=1; ybin<=hTH1F_["hGmtEtaVsQual"]->GetNbinsY(); ++ybin)
     {
       stringstream px ;
@@ -245,8 +242,7 @@ void EfficiencyPlotter::plotAndSave()
 
   TH1 *hGmtBinEta = hTH1F_["hGmtBinEta"]; 
 
-  THStack * hEffvsGmtEtaStack = new THStack(("hEffvsGmtEtaStack").c_str(), 
-					    ("hEffGmtvsEtaStack").c_str());
+  THStack * hEffvsGmtEtaStack = new THStack("hEffvsGmtEtaStack","hEffGmtvsEtaStack");
   for(int ybin=1; ybin<=hTH1F_["hGmtBinEtaVsQual"]->GetNbinsY(); ++ybin)
     {
       stringstream px ;

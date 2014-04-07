@@ -91,13 +91,8 @@ void ControlPlotter::fillTrigger(TriggeredMuon & muon)
   float dPhi  = muon.deltaPhi();
   float dEta  = muon.deltaEta();
   
-  float eta   = muon.my_gmt->eta(muon.my_igmt);
-  
   hTH1_["hGmtDeltaPhi"]->Fill(dPhi);
   hTH1_["hGmtDeltaEta"]->Fill(dEta);
-
-  hTH1_["hGmtDeltaPhi"]->Fill(eta,dPhi);
-  hTH1_["hGmtDeltaEta"]->Fill(eta,dEta);
   
 }
 

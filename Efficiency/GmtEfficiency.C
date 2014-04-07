@@ -1,9 +1,9 @@
-#include "../../UserCode/L1TriggerDPG/macros/L1Ntuple.h"
+#include "../../L1TriggerDPG/L1Ntuples/macros/L1Ntuple.h"
 #include "CommonUtils.C"
 #include "../CommonUtils/TriggeredMuon.C"
-#include "DTControlPlotter.C"
+#include "ControlPlotter.C"
 #include "TriggeredMuons.C"
-#include "DTEfficiencyPlotter.C"
+#include "EfficiencyPlotter.C"
 
 // --------------------------------------------------------------------
 //                       GmtEfficiency macro definition
@@ -18,7 +18,7 @@ public :
   GmtEfficiency()  {}
   ~GmtEfficiency() {}
 
-  void runEfficiency(int nEvents = 0);
+  void runEfficiency(int nEvents,  std::string outFileName);
   
 
 };
@@ -32,7 +32,7 @@ public :
 void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
 
   system("mkdir -p results");
-  TFile *outFile = new TFile(std::str("results/" + outFileName).c_str() ,"recreate"); // CB out file name at config time
+  TFile *outFile = new TFile(std::string("results/" + outFileName).c_str() ,"recreate"); // CB out file name at config time
 
   std::vector<EfficiencyPlotter *> plotters;
   plotters.push_back(new EfficiencyPlotter(outFile,"Pt16",16));
@@ -61,8 +61,8 @@ void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
       trigMuons.findProbes()                     &&
       trigMuons.runTriggerMatching(controlPlots);
   
-      triggeredMuonsIt trigMuonsIt  = trigMuons.dt_trigger_muons.begin();
-      triggeredMuonsIt trigMuonsEnd = trigMuons.dt_trigger_muons.end();
+      triggeredMuonsIt trigMuonsIt  = trigMuons.my_triggered_muons.begin();
+      triggeredMuonsIt trigMuonsEnd = trigMuons.my_triggered_muons.end();
 
       for(;trigMuonsIt!=trigMuonsEnd;++trigMuonsIt)
 	{

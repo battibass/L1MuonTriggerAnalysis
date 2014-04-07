@@ -45,7 +45,7 @@ bool TriggeredMuons::findTightMuons(ControlPlotter* plots)
       if ( (my_mu->howmanytypes.at(iMu) >> 4) & 0x01 &&
 	   (my_mu->howmanytypes.at(iMu) >> 5) & 0x01   )
 	{
-	  my_tight_muons.push_back(TriggeredMuon(my_mu,iMu,0));
+	  my_tight_muons.push_back(TriggeredMuon(my_mu,iMu,0,0));
 	}
     }
 
@@ -59,11 +59,11 @@ bool TriggeredMuons::findTightMuons(ControlPlotter* plots)
       plots->fillTight(mu1);
       plots->fillTight(mu2);
 
-      float fDPhi = fabs(acos(cos( mu1.my_mu->sa_phi_mb2[mu1.imy_mu] - 
-			           mu2.my_mu->sa_phi_mb2[mu2.imy_mu] ) ) );
+      float fDPhi = fabs(acos(cos( mu1.my_mu->sa_phi_mb2[mu1.my_imu] - 
+			           mu2.my_mu->sa_phi_mb2[mu2.my_imu] ) ) );
 
-      float fDEta = fabs(acos(cos( mu1.my_mu->eta[mu1.imy_mu] - 
-			           mu2.my_mu->eta[mu2.imy_mu] ) ) );
+      float fDEta = fabs(acos(cos( mu1.my_mu->eta[mu1.my_imu] - 
+			           mu2.my_mu->eta[mu2.my_imu] ) ) );
 
       return fDPhi > MAX_MU_MU_DPHI &&
 	     fDEta > MAX_MU_MU_DETA ;
@@ -87,7 +87,7 @@ bool TriggeredMuons::findProbes()
       for (;tagIt!=tagEnd;++tagIt)
 	{
 	  
-	  if (tagIt!=probeIt && tagIt->my_mu->hlt_isomu.at(tagIt->imy_mu))
+	  if (tagIt!=probeIt && tagIt->my_mu->hlt_isomu.at(tagIt->my_imu))
 	    {
 	      my_probe_muons.push_back(*probeIt);
 	    }
@@ -107,12 +107,12 @@ bool TriggeredMuons::runTriggerMatching(ControlPlotter* plots)
   for (;probeIt!=probeEnd;++probeIt)
     {
 
-      TriggeredMuon bestCand(probeIt->my_mu,probeIt->imy_mu,0,0);
+      TriggeredMuon bestCand(probeIt->my_mu,probeIt->my_imu,0,0);
 
       //       if (abs(my_gmt->CandBx.at(iDt))>1) CB what to do with BX
       // 	continue;
       
-      for (int iGmt=0; iGmt<my_gmt->Ncand; ++iGmt)
+      for (int iGmt=0; iGmt<my_gmt->N; ++iGmt)
 	{
 	  TriggeredMuon cand(probeIt->my_mu,probeIt->my_imu,my_gmt,iGmt);
 	  
@@ -122,8 +122,8 @@ bool TriggeredMuons::runTriggerMatching(ControlPlotter* plots)
 	    {
 	      if (bestCand.hasGmt()) 
 		{
-		  int ptCand     = cand.gmt()->Pt.at(cand.igmt());
-		  int ptBestCand = bestCand.gmt()->Pt.at(bestCand.igmt());
+		  int ptCand     = cand.my_gmt->Pt.at(cand.my_igmt);
+		  int ptBestCand = bestCand.my_gmt->Pt.at(bestCand.my_igmt);
 		  
 		  if (ptCand > ptBestCand)
 		    bestCand = cand;
