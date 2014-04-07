@@ -1,0 +1,110 @@
+#include "../../UserCode/L1TriggerDPG/macros/L1Ntuple.h"
+#include "CommonUtils.C"
+#include "../CommonUtils/TriggeredMuon.C"
+#include "DTControlPlotter.C"
+#include "TriggeredMuons.C"
+#include "DTEfficiencyPlotter.C"
+
+// --------------------------------------------------------------------
+//                       GmtEfficiency macro definition
+// --------------------------------------------------------------------
+
+class GmtEfficiency : public L1Ntuple
+{
+public :
+  
+  //constructor    
+  GmtEfficiency(std::string filename) : L1Ntuple(filename) {}
+  GmtEfficiency()  {}
+  ~GmtEfficiency() {}
+
+  void runEfficiency(int nEvents = 0);
+  
+
+};
+        
+
+// --------------------------------------------------------------------
+//                             run function 
+// --------------------------------------------------------------------
+
+
+void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
+
+  system("mkdir -p results");
+  TFile *outFile = new TFile(std::str("results/" + outFileName).c_str() ,"recreate"); // CB out file name at config time
+
+  std::vector<EfficiencyPlotter *> plotters;
+  plotters.push_back(new EfficiencyPlotter(outFile,"Pt16",16));
+  plotters.push_back(new EfficiencyPlotter(outFile,"Pt20",20));
+  plotters.push_back(new EfficiencyPlotter(outFile,"Pt25",25));
+  plotters.push_back(new EfficiencyPlotter(outFile,"Pt30",30));
+
+  ControlPlotter *controlPlots = new ControlPlotter(outFile,"ControlPlots");
+
+  int nevents = nEvents == 0 ? GetEntries() : nEvents;
+        
+  std::cout << "Running on " << nevents << " events." << std::endl;
+  for (Long64_t event=0; event<nevents; ++event)
+    { 
+      Long64_t eventEntry = LoadTree(event); 
+      if (eventEntry < 0) break;
+      GetEntry(event);
+
+      if (event%200000 == 0) 
+	std::cout << "Processed " << event << " events." << std::endl;
+
+      TriggeredMuons trigMuons(recoMuon_,gmt_);
+      
+      // CB make this configurable for T&P and for other saples (DY, W, JPsi ...)
+      trigMuons.findTightMuons(controlPlots)     && 
+      trigMuons.findProbes()                     &&
+      trigMuons.runTriggerMatching(controlPlots);
+  
+      triggeredMuonsIt trigMuonsIt  = trigMuons.dt_trigger_muons.begin();
+      triggeredMuonsIt trigMuonsEnd = trigMuons.dt_trigger_muons.end();
+
+      for(;trigMuonsIt!=trigMuonsEnd;++trigMuonsIt)
+	{
+	  std::vector<EfficiencyPlotter*>::const_iterator plotterIt  = plotters.begin();
+	  std::vector<EfficiencyPlotter*>::const_iterator plotterEnd = plotters.end();
+	  
+	  for(;plotterIt!=plotterEnd;++plotterIt)
+	    {
+	      (*plotterIt)->fill(trigMuonsIt,event_,(doreco ? recoVertex_ : 0));
+	    }
+
+	}
+
+    } // end event loop
+
+  std::vector<EfficiencyPlotter*>::const_iterator plotterIt  = plotters.begin();
+  std::vector<EfficiencyPlotter*>::const_iterator plotterEnd = plotters.end();
+  
+  for(;plotterIt!=plotterEnd;++plotterIt)
+    {
+      (*plotterIt)->plotAndSave();
+    }
+
+  plotAndSaveAll(plotters,"EffVsPt");
+  plotAndSaveAll(plotters,"EffVsPtFine");
+  plotAndSaveAll(plotters,"EffVsPtCoarse");
+  plotAndSaveAll(plotters,"EffVsEta");
+  plotAndSaveAll(plotters,"EffVsPhi");
+  plotAndSaveAll(plotters,"EffVsVtx");
+  plotAndSaveAll(plotters,"EffVsLumi");
+
+  controlPlots->plotAndSave();
+
+}
+
+// --------------------------------------------------------------------
+
+void goEfficiency(std::string ntupleFilePath, std::string outFileName, int nEvents = 0) 
+{
+  
+  GmtEfficiency analyzerPhysics(ntupleFilePath.c_str()); 
+  analyzerPhysics.runEfficiency(nEvents, outFileName);
+  
+}
+
