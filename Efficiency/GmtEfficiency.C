@@ -87,12 +87,9 @@ void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
     }
 
   plotAndSaveAll(plotters,"EffVsPt");
-  plotAndSaveAll(plotters,"EffVsPtFine");
-  plotAndSaveAll(plotters,"EffVsPtCoarse");
   plotAndSaveAll(plotters,"EffVsEta");
   plotAndSaveAll(plotters,"EffVsPhi");
-  plotAndSaveAll(plotters,"EffVsVtx");
-  plotAndSaveAll(plotters,"EffVsLumi");
+  //plotAndSaveAll(plotters,"EffVsVtx");
 
   controlPlots->plotAndSave();
 

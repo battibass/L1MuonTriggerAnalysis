@@ -107,8 +107,7 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
 
   bool hasTrigger = muon->hasTriggerMatch() && 
     ((muon->my_gmt->Pt.at(muon->my_igmt)) +0.01 > minPt_);
-
-  
+ 
   float gmtEta       = 999.;
   int   gmtQual      = 999;
   int   gmtChambId   = 999;
@@ -137,7 +136,6 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
 
       if (hasTrigger) 
 	{
-	  hTH1F_["hGmtBinEta"]->Fill(gmtEta);
 	  hTH1F_["hGmtEtaVsQual"]->Fill(eta,gmtQual);
 	}
       
@@ -233,36 +231,6 @@ void EfficiencyPlotter::plotAndSave()
   histos_["hEffVsEta"]->GetPaintedGraph()->GetYaxis()->SetTitleSize(0.04);
   
   printHisto(cEffvsEta,"EffvsEta");
-  
-
-  TCanvas *cEffvsEtaGmt = new TCanvas((baseName_+"cEffvsEtaGmt").c_str(),
-				      (baseName_+"cEffvsEtaGmt").c_str(),500,500);
-  cEffvsEtaGmt->cd();
-  cEffvsEtaGmt->SetGrid();  
-
-  TH1 *hGmtBinEta = hTH1F_["hGmtBinEta"]; 
-
-  THStack * hEffvsGmtEtaStack = new THStack("hEffvsGmtEtaStack","hEffGmtvsEtaStack");
-  for(int ybin=1; ybin<=hTH1F_["hGmtBinEtaVsQual"]->GetNbinsY(); ++ybin)
-    {
-      stringstream px ;
-      px<<ybin<<"QualityGmtEta";
-      TH1D* projection = static_cast<TH2*>(hTH1F_["hGmtBinEtaVsQual"]) ->ProjectionX(px.str().c_str(),ybin,ybin);
-	  
-      projection->SetFillColor(colorMap[ybin-1]);
-      projection->SetLineColor(colorMap[ybin-1]);
-      projection->Divide(hGmtBinEta);
-      hEffvsGmtEtaStack->Add(projection);
-    }
-  
-  hEffvsGmtEtaStack->Draw();
-  hEffvsGmtEtaStack->GetXaxis()->SetTitle("Gmt #eta");
-  hEffvsGmtEtaStack->GetYaxis()->SetTitle("quality contrib. to efficiency");
-  hEffvsGmtEtaStack->GetXaxis()->SetTitleSize(0.04);
-  hEffvsGmtEtaStack->GetYaxis()->SetTitleSize(0.04);    
-  
-  printHisto(cEffvsEtaGmt,"EffvsGmtEta");
-
 
   TCanvas *cEffvsPhi = new TCanvas((baseName_+"cEffvsPhi").c_str(),
 				   (baseName_+"cEffvsPhi").c_str(),500,500);
@@ -296,7 +264,6 @@ void EfficiencyPlotter::plotAndSave()
   
   printHisto(cEffvsPhi,"EffvsPhi");
 
-
   TCanvas *cEffPhivsEta = new TCanvas((baseName_+"cEffPhivsEta").c_str(),
 				      (baseName_+"cEffPhivsEta").c_str(),500,500);
   cEffPhivsEta->cd();
@@ -311,38 +278,38 @@ void EfficiencyPlotter::plotAndSave()
   printHisto(cEffPhivsEta,"EffPhivsEta");
 
 
-  TCanvas *cEffvsVtx = new TCanvas((baseName_+"cEffvsVtx").c_str(),
-				   (baseName_+"cEffvsVtx").c_str(),500,500);
-  cEffvsVtx->cd();
-  cEffvsVtx->SetGrid();  
+//   TCanvas *cEffvsVtx = new TCanvas((baseName_+"cEffvsVtx").c_str(),
+// 				   (baseName_+"cEffvsVtx").c_str(),500,500);
+//   cEffvsVtx->cd();
+//   cEffvsVtx->SetGrid();  
   
-  histos_["hEffVsVtx"]->Draw();
+//   histos_["hEffVsVtx"]->Draw();
   
-  TH1 const *hEffVsVtxTotal = histos_["hEffVsVtx"]->GetTotalHistogram(); 
+//   TH1 const *hEffVsVtxTotal = histos_["hEffVsVtx"]->GetTotalHistogram(); 
   
-  THStack * hEffvsVtxStack = new THStack("hEffvsVtxStack", "hEffvsVtxStack");
-  for(int ybin=1; ybin<=hTH1F_["hGmtVtxVsQual"]->GetNbinsY(); ++ybin)
-    {
-      stringstream px ;
-      px<<ybin<<"QualityVtx";
-      TH1D* projection = static_cast<TH2*>(hTH1F_["hGmtVtxVsQual"]) ->ProjectionX(px.str().c_str(),ybin,ybin);
+//   THStack * hEffvsVtxStack = new THStack("hEffvsVtxStack", "hEffvsVtxStack");
+//   for(int ybin=1; ybin<=hTH1F_["hGmtVtxVsQual"]->GetNbinsY(); ++ybin)
+//     {
+//       stringstream px ;
+//       px<<ybin<<"QualityVtx";
+//       TH1D* projection = static_cast<TH2*>(hTH1F_["hGmtVtxVsQual"]) ->ProjectionX(px.str().c_str(),ybin,ybin);
       
-      projection->SetFillColor(colorMap[ybin-1]);
-      projection->SetLineColor(colorMap[ybin-1]);
-      projection->Divide(hEffVsVtxTotal);
-      hEffvsVtxStack->Add(projection);
-    }
+//       projection->SetFillColor(colorMap[ybin-1]);
+//       projection->SetLineColor(colorMap[ybin-1]);
+//       projection->Divide(hEffVsVtxTotal);
+//       hEffvsVtxStack->Add(projection);
+//     }
   
-  hEffvsVtxStack->Draw("same");
-  histos_["hEffVsVtx"]->Draw("same");
+//   hEffvsVtxStack->Draw("same");
+//   histos_["hEffVsVtx"]->Draw("same");
   
-  cEffvsVtx->Update();
-  histos_["hEffVsVtx"]->GetPaintedGraph()->GetXaxis()->SetRangeUser(5.,30.);
-  histos_["hEffVsVtx"]->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.,1.1);
-  histos_["hEffVsVtx"]->GetPaintedGraph()->GetXaxis()->SetTitleSize(0.04);
-  histos_["hEffVsVtx"]->GetPaintedGraph()->GetYaxis()->SetTitleSize(0.04);
+//   cEffvsVtx->Update();
+//   histos_["hEffVsVtx"]->GetPaintedGraph()->GetXaxis()->SetRangeUser(5.,30.);
+//   histos_["hEffVsVtx"]->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.,1.1);
+//   histos_["hEffVsVtx"]->GetPaintedGraph()->GetXaxis()->SetTitleSize(0.04);
+//   histos_["hEffVsVtx"]->GetPaintedGraph()->GetYaxis()->SetTitleSize(0.04);
   
-  printHisto(cEffvsVtx,"EffvsVtx");
+//   printHisto(cEffvsVtx,"EffvsVtx");
   
   save();
 
