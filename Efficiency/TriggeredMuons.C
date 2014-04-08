@@ -122,10 +122,10 @@ bool TriggeredMuons::runTriggerMatching(ControlPlotter* plots)
 	    {
 	      if (bestCand.hasGmt()) 
 		{
-		  int ptCand     = cand.my_gmt->Pt.at(cand.my_igmt);
-		  int ptBestCand = bestCand.my_gmt->Pt.at(bestCand.my_igmt);
+		  int qualCand     = cand.my_gmt->Qual.at(cand.my_igmt);
+		  int qualBestCand = bestCand.my_gmt->Qual.at(bestCand.my_igmt);
 		  
-		  if (ptCand > ptBestCand)
+		  if (qualCand > qualBestCand)
 		    bestCand = cand;
 		} 
 	      else

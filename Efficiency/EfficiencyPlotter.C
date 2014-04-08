@@ -69,10 +69,10 @@ void EfficiencyPlotter::config()
 
     name  = baseName_ + "_hEffVsEta";
     title = name + ";tight muon #eta;efficiency";
-    histos_["hEffVsEta"] = new TEfficiency(name.c_str(),title.c_str(),56,-1.05,1.05);
+    histos_["hEffVsEta"] = new TEfficiency(name.c_str(),title.c_str(),56,-2.4,2.4);
 
     name  = (baseName_ + "_hGmtEtaVsQual");
-    hTH1F_["hGmtEtaVsQual"] = new TH2F(name.c_str(),name.c_str(),56,-1.05,1.05,7,0.5,7.5);
+    hTH1F_["hGmtEtaVsQual"] = new TH2F(name.c_str(),name.c_str(),56,-2.4,2.4,7,0.5,7.5);
 
     name  = (baseName_ + "_hEffVsPhi");
     title = name + ";tight muon #phi [rad];efficiency";
@@ -83,7 +83,7 @@ void EfficiencyPlotter::config()
 
     name  = (baseName_ + "_hEffPhiVsEta");
     title = name + ";tight muon #phi [rad];tight muon #eta;efficiency";
-    histos_["hEffPhiVsEta"] = new TEfficiency(name.c_str(),title.c_str(),48,-TMath::Pi(),TMath::Pi(),56,-1.05,1.05);
+    histos_["hEffPhiVsEta"] = new TEfficiency(name.c_str(),title.c_str(),48,-TMath::Pi(),TMath::Pi(),56,-2.4,2.4);
 
     // name  = (baseName_ + "_hEffVsVtx");
     // title = name + ";N. reco vtx ;efficiency";

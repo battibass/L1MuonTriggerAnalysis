@@ -35,11 +35,6 @@
 int colorMap[7] = {kYellow,kOrange+7,kRed,kBlue+1,
 		   kAzure+1,kCyan+1,kGreen+2}; // CB the color map for DTTF qualities
 
-int colorMapFine[11] = {kYellow, kOrange+7,kOrange+1,
-			kRed+1,kRed-4,kRed-7,
-			kBlue+1, kAzure+1, kCyan+1,kCyan,
-			kGreen+2}; // CB the color map for chamber based qualities
-
 typedef std::pair<int,int> qualPair;
 typedef std::map<qualPair,int> qualToFine;
 
