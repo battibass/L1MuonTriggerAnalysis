@@ -22,7 +22,7 @@ public :
   ~TriggeredMuon() {};
 
 
-  bool  hasTriggerMatch(Long64_t event = 0) const  
+  bool  hasTriggerMatch() const  
   { 
     return fabs(deltaPhi()) < MAX_MU_GMT_DPHI &&
            fabs(deltaEta()) < MAX_MU_GMT_DETA ; 
@@ -75,10 +75,10 @@ public :
 
 public :
 
-  L1Analysis::L1AnalysisGMTDataFormat * my_gmt;
   L1Analysis::L1AnalysisRecoMuonDataFormat * my_mu;
-
-  int my_igmt;
   int my_imu;
+
+  L1Analysis::L1AnalysisGMTDataFormat * my_gmt;
+  int my_igmt;
 
 };

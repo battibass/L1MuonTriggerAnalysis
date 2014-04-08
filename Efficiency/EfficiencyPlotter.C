@@ -108,13 +108,10 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
   bool hasTrigger = muon->hasTriggerMatch() && 
     ((muon->my_gmt->Pt.at(muon->my_igmt)) +0.01 > minPt_);
  
-  float gmtEta       = 999.;
   int   gmtQual      = 999;
-  int   gmtChambId   = 999;
   
   if (muon->hasTriggerMatch()) 
     {
-      gmtEta  = muon->my_gmt->Eta.at(muon->my_igmt);
       gmtQual = muon->my_gmt->Qual.at(muon->my_igmt);      
     }
   
