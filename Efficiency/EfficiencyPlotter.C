@@ -105,14 +105,15 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
 
   // int  nVtx  = vtx ? vtx->nVtx : 0;
 
-  bool hasTrigger = muon->hasTriggerMatch() && 
+  bool hasTrigger = muon->hasTriggerMatch() &&                  
     ((muon->my_gmt->Pt.at(muon->my_igmt)) +0.01 > minPt_);
  
   int   gmtQual      = 999;
   
   if (muon->hasTriggerMatch()) 
     {
-      gmtQual = muon->my_gmt->Qual.at(muon->my_igmt);      
+      gmtQual = muon->my_gmt->Qual.at(muon->my_igmt);
+      hasTrigger = hasTrigger && gmtQualityMask[gmtQual-1];
     }
   
   if (fabs(eta) < MAX_MU_ETA)

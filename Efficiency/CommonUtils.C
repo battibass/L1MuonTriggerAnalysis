@@ -32,6 +32,9 @@
 
 #define MAX_MU_ETA 2.4
 
+int gmtQualityMask[7] = {0, 0, 0, 1, 1, 1, 1}; // single mu qualities
+//int gmtQualityMask[7] = {0, 0, 1, 0, 1, 1, 1}; // double mu qualities
+
 int colorMap[7] = {kYellow,kOrange+7,kRed,kBlue+1,
 		   kAzure+1,kCyan+1,kGreen+2}; // CB the color map for DTTF qualities
 
