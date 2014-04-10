@@ -28,6 +28,12 @@ public :
            fabs(deltaEta()) < MAX_MU_GMT_DETA ; 
   };
 
+  bool hasTriggerBX0() const
+  {
+    return my_gmt != 0 && my_gmt->CandBx.at(my_igmt) == 0;
+  }
+  
+
   bool  hasHLTTriggerMatch() const 
   { 
     return  my_mu != 0 ? my_mu->hlt_isomu.at(my_imu) : false; 

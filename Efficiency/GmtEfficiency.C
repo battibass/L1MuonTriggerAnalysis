@@ -44,19 +44,18 @@ void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
 
   int nevents = nEvents == 0 ? GetEntries() : nEvents;
         
-  std::cout << "Running on " << nevents << " events." << std::endl;
+  std::cout << "File size is " << nevents << " events." << std::endl;
   for (Long64_t event=0; event<nevents; ++event)
     { 
       Long64_t eventEntry = LoadTree(event); 
       if (eventEntry < 0) break;
       GetEntry(event);
 
-      if (event%200000 == 0) 
+      if (event%50000 == 0) 
 	std::cout << "Processed " << event << " events." << std::endl;
 
       TriggeredMuons trigMuons(recoMuon_,gmt_);
       
-      // CB make this configurable for T&P and for other saples (DY, W, JPsi ...)
       trigMuons.findTightMuons(controlPlots)     && 
       trigMuons.findProbes()                     &&
       trigMuons.runTriggerMatching(controlPlots);

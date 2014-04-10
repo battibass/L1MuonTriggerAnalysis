@@ -16,6 +16,8 @@ public :
 
   void fillTight(TriggeredMuon & muon );  
   void fillTrigger(TriggeredMuon & muon );
+
+  void fillTrigger(int nMatchedCands);
   
   void config();
   void plotAndSave();
@@ -60,6 +62,9 @@ void ControlPlotter::config()
   name  = (baseName_ + "_hChi2");
   hTH1_["hChi2"] = new TH1F(name.c_str(),name.c_str(),20,0.5,20.5);
 
+  name  = (baseName_ + "_hGmtMatchedCands");
+  hTH1_["hGmtMatchedCands"] = new TH1F(name.c_str(),name.c_str(),11,-0.5,10.5);
+
   name  = (baseName_ + "_hGmtDeltaPhi");
   hTH1_["hGmtDeltaPhi"] = new TH1F(name.c_str(),name.c_str(),100,0.,TMath::Pi());
 
@@ -67,10 +72,10 @@ void ControlPlotter::config()
   hTH1_["hGmtDeltaEta"] = new TH1F(name.c_str(),name.c_str(),100,-1.,1.);
 
   name  = (baseName_ + "_hGmtDeltaPhiVsEta");
-  hTH1_["hGmtDeltaPhiVsEta"] = new TH2F(name.c_str(),name.c_str(),24,-2.4,2.4,100,0.,TMath::Pi());
+  hTH1_["hGmtDeltaPhiVsEta"] = new TH2F(name.c_str(),name.c_str(),24,-2.4,2.4,200,0.,TMath::Pi());
 
   name  = (baseName_ + "_hGmtDeltaEtaVsEta");
-  hTH1_["hGmtDeltaEtaVsEta"] = new TH2F(name.c_str(),name.c_str(),24,-2.4,2.4,100,-1.,1.);
+  hTH1_["hGmtDeltaEtaVsEta"] = new TH2F(name.c_str(),name.c_str(),24,-2.4,2.4,200,-1.,1.);
   
 }
 
@@ -90,9 +95,21 @@ void ControlPlotter::fillTrigger(TriggeredMuon & muon)
   
   float dPhi  = muon.deltaPhi();
   float dEta  = muon.deltaEta();
+
+  float eta = muon.my_mu->eta.at(muon.my_imu);
   
   hTH1_["hGmtDeltaPhi"]->Fill(dPhi);
   hTH1_["hGmtDeltaEta"]->Fill(dEta);
+
+  hTH1_["hGmtDeltaPhiVsEta"]->Fill(eta,dPhi);
+  hTH1_["hGmtDeltaEtaVsEta"]->Fill(eta,dEta);
+  
+}
+
+void ControlPlotter::fillTrigger(int nMatchedCands) 
+{
+  
+  hTH1_["hGmtMatchedCands"]->Fill(nMatchedCands);
   
 }
 
@@ -125,6 +142,18 @@ void ControlPlotter::plotAndSave()
   hTH1_["hChi2"]->GetYaxis()->SetTitleSize(0.04);
   
   printHisto(cChi2,"nChi2");
+
+  TCanvas *cGmtMatchedCands = new TCanvas((baseName_+"cGmtMatchedCands").c_str(),
+					  (baseName_+"cGmtMatchedCands").c_str(),500,500);
+  cGmtMatchedCands->cd();
+  cGmtMatchedCands->SetGrid();  
+  cGmtMatchedCands->SetLogy();  
+
+  hTH1_["hGmtMatchedCands"]->Draw();
+  hTH1_["hGmtMatchedCands"]->GetXaxis()->SetTitleSize(0.04);
+  hTH1_["hGmtMatchedCands"]->GetYaxis()->SetTitleSize(0.04);
+  
+  printHisto(cGmtMatchedCands,"nGmtMatchedCands");
 
   TCanvas *cGmtDeltaPhi = new TCanvas((baseName_+"cGmtDeltaPhi").c_str(),
 				  (baseName_+"cGmtDeltaPhi").c_str(),500,500);

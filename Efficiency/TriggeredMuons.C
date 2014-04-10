@@ -51,45 +51,61 @@ bool TriggeredMuons::findTightMuons(ControlPlotter* plots)
 
   int nTightMu = my_tight_muons.size();  
 
-  if (nTightMu == 2)
+  bool isGoodEvent = false;
+
+  if (nTightMu == 2 && (effCompType == TWO_MUON_NO_TRIG || effCompType == COUNT_TNP) )
     {
       TriggeredMuon & mu1 = my_tight_muons.at(0);
       TriggeredMuon & mu2 = my_tight_muons.at(1);
-
+      
       plots->fillTight(mu1);
       plots->fillTight(mu2);
-
+      
       float fDPhi = fabs(acos(cos( mu1.my_mu->sa_phi_mb2[mu1.my_imu] - 
 			           mu2.my_mu->sa_phi_mb2[mu2.my_imu] ) ) );
-
+      
       float fDEta = fabs(acos(cos( mu1.my_mu->eta[mu1.my_imu] - 
 			           mu2.my_mu->eta[mu2.my_imu] ) ) );
 
-      return fDPhi > MAX_MU_MU_DPHI &&
-	     fDEta > MAX_MU_MU_DETA ;
+      isGoodEvent = fDPhi > MAX_MU_MU_DPHI &&
+	            fDEta > MAX_MU_MU_DETA ;
+    }
+  else if (nTightMu == 1 && effCompType == ONE_MUON_NO_TRIG )
+    {
+      isGoodEvent = true;
     }
 
-  return false;
+  return isGoodEvent;
 
 }
 
 bool TriggeredMuons::findProbes()
 {
 
-  triggeredMuonsIt probeIt  = my_tight_muons.begin();
-  triggeredMuonsIt probeEnd = my_tight_muons.end();
-
-  for (;probeIt!=probeEnd;++probeIt)
+  if (effCompType == ONE_MUON_NO_TRIG)
     {
-      triggeredMuonsIt tagIt  = my_tight_muons.begin();
-      triggeredMuonsIt tagEnd = my_tight_muons.end();
+      my_probe_muons = my_tight_muons;
+    }
+  else
+    {
+      triggeredMuonsIt probeIt  = my_tight_muons.begin();
+      triggeredMuonsIt probeEnd = my_tight_muons.end();
 
-      for (;tagIt!=tagEnd;++tagIt)
+      for (;probeIt!=probeEnd;++probeIt)
 	{
+	  triggeredMuonsIt tagIt  = my_tight_muons.begin();
+	  triggeredMuonsIt tagEnd = my_tight_muons.end();
 	  
-	  if (tagIt!=probeIt && tagIt->my_mu->hlt_isomu.at(tagIt->my_imu))
+	  for (;tagIt!=tagEnd;++tagIt)
 	    {
-	      my_probe_muons.push_back(*probeIt);
+	      
+	      bool isGoodTag = effCompType == COUNT_TNP ? tagIt->my_mu->hlt_isomu.at(tagIt->my_imu) : true;
+	      
+	      if (tagIt!=probeIt && isGoodTag)
+		{
+		  my_probe_muons.push_back(*probeIt);
+		}
+	      
 	    }
 	}
     }
@@ -112,6 +128,8 @@ bool TriggeredMuons::runTriggerMatching(ControlPlotter* plots)
       //       if (abs(my_gmt->CandBx.at(iDt))>1) CB what to do with BX
       // 	continue;
       
+      int nMatchedCands = 0;
+
       for (int iGmt=0; iGmt<my_gmt->N; ++iGmt)
 	{
 	  TriggeredMuon cand(probeIt->my_mu,probeIt->my_imu,my_gmt,iGmt);
@@ -131,9 +149,14 @@ bool TriggeredMuons::runTriggerMatching(ControlPlotter* plots)
 	      else
 		{
 		  bestCand = cand;
-		}  
+		}
+
+	      nMatchedCands++;
+	      
 	    }
 	}
+
+      plots->fillTrigger(nMatchedCands);
 
       my_triggered_muons.push_back(bestCand);
 

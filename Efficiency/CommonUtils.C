@@ -32,6 +32,10 @@
 
 #define MAX_MU_ETA 2.4
 
+enum EffCompType { COUNT_TNP, TWO_MUON_NO_TRIG, ONE_MUON_NO_TRIG };
+
+EffCompType effCompType = TWO_MUON_NO_TRIG;
+
 int gmtQualityMask[7] = {0, 0, 0, 1, 1, 1, 1}; // single mu qualities
 //int gmtQualityMask[7] = {0, 0, 1, 0, 1, 1, 1}; // double mu qualities
 

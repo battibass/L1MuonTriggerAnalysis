@@ -67,12 +67,15 @@ void EfficiencyPlotter::config()
     name  = baseName_ + "_hEffVsPt";
     histos_["hEffVsPt"] = new TEfficiency(name.c_str(),title.c_str(),60,0.5,60.5);
 
+    const double etaBins[18] = {-2.4,-2.1,-1.6,-1.2,-1.05,-0.9,-0.6,-0.3,-0.2,
+				 0.2, 0.3, 0.6, 0.9, 1.05, 1.2, 1.6, 2.1, 2.4};
+
     name  = baseName_ + "_hEffVsEta";
     title = name + ";tight muon #eta;efficiency";
-    histos_["hEffVsEta"] = new TEfficiency(name.c_str(),title.c_str(),56,-2.4,2.4);
+    histos_["hEffVsEta"] = new TEfficiency(name.c_str(),title.c_str(),17,etaBins);
 
     name  = (baseName_ + "_hGmtEtaVsQual");
-    hTH1F_["hGmtEtaVsQual"] = new TH2F(name.c_str(),name.c_str(),56,-2.4,2.4,7,0.5,7.5);
+    hTH1F_["hGmtEtaVsQual"] = new TH2F(name.c_str(),name.c_str(),17,etaBins,7,0.5,7.5);
 
     name  = (baseName_ + "_hEffVsPhi");
     title = name + ";tight muon #phi [rad];efficiency";
