@@ -70,7 +70,7 @@ void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
 	  
 	  for(;plotterIt!=plotterEnd;++plotterIt)
 	    {
-	      (*plotterIt)->fill(trigMuonsIt,event_,(doreco ? recoVertex_ : 0));
+	      (*plotterIt)->fill(trigMuonsIt,(doreco ? recoVertex_ : 0));
 	    }
 
 	}
@@ -86,6 +86,9 @@ void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
     }
 
   plotAndSaveAll(plotters,"EffVsPt");
+  plotAndSaveAll(plotters,"EffVsPtBarrel");
+  plotAndSaveAll(plotters,"EffVsPtOverlap");
+  plotAndSaveAll(plotters,"EffVsPtEndcap");
   plotAndSaveAll(plotters,"EffVsEta");
   plotAndSaveAll(plotters,"EffVsPhi");
   //plotAndSaveAll(plotters,"EffVsVtx");
