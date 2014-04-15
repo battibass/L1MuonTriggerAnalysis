@@ -32,15 +32,15 @@ public :
 void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
 
   system("mkdir -p results");
-  TFile *outFile = new TFile(std::string("results/" + outFileName).c_str() ,"recreate"); // CB out file name at config time
+  TFile *outFile = new TFile(std::string("results/" + outFileName + ".root").c_str() ,"recreate");
 
   std::vector<EfficiencyPlotter *> plotters;
-  plotters.push_back(new EfficiencyPlotter(outFile,"Pt16",16));
-  plotters.push_back(new EfficiencyPlotter(outFile,"Pt20",20));
-  plotters.push_back(new EfficiencyPlotter(outFile,"Pt25",25));
-  plotters.push_back(new EfficiencyPlotter(outFile,"Pt30",30));
+  plotters.push_back(new EfficiencyPlotter(outFile,outFileName,"Pt16",16));
+  plotters.push_back(new EfficiencyPlotter(outFile,outFileName,"Pt20",20));
+  plotters.push_back(new EfficiencyPlotter(outFile,outFileName,"Pt25",25));
+  plotters.push_back(new EfficiencyPlotter(outFile,outFileName,"Pt30",30));
 
-  ControlPlotter *controlPlots = new ControlPlotter(outFile,"ControlPlots");
+  ControlPlotter *controlPlots = new ControlPlotter(outFile,outFileName,"ControlPlots");
 
   int nevents = nEvents == 0 ? GetEntries() : nEvents;
         
@@ -85,15 +85,16 @@ void GmtEfficiency::runEfficiency(int nEvents, std::string outFileName) {
       (*plotterIt)->plotAndSave();
     }
 
-  plotAndSaveAll(plotters,"EffVsPt");
-  plotAndSaveAll(plotters,"EffVsPtBarrel");
-  plotAndSaveAll(plotters,"EffVsPtOverlap");
-  plotAndSaveAll(plotters,"EffVsPtEndcap");
-  plotAndSaveAll(plotters,"EffVsEta");
-  plotAndSaveAll(plotters,"EffVsPhi");
-  //plotAndSaveAll(plotters,"EffVsVtx");
+  plotAndSaveAll(plotters,(outFileName + "/All").c_str(),"EffVsPt");
+  plotAndSaveAll(plotters,(outFileName + "/All").c_str(),"EffVsPtBarrel");
+  plotAndSaveAll(plotters,(outFileName + "/All").c_str(),"EffVsPtOverlap");
+  plotAndSaveAll(plotters,(outFileName + "/All").c_str(),"EffVsPtEndcap");
+  plotAndSaveAll(plotters,(outFileName + "/All").c_str(),"EffVsEta");
+  plotAndSaveAll(plotters,(outFileName + "/All").c_str(),"EffVsPhi");
 
   controlPlots->plotAndSave();
+
+  outFile->Write();
 
 }
 

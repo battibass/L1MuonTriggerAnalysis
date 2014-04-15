@@ -9,10 +9,8 @@ class EfficiencyPlotter
 
 public :
 
-  EfficiencyPlotter(TFile* file, 
-		    std::string name = "", float minPt = 0) : outFile_(file) , 
-							      baseName_(name),
-							      minPt_(minPt) { config(); };   
+  EfficiencyPlotter(TFile* file, std::string fileName, std::string name = "", float minPt = 0) : 
+    outFile_(file) , fileName_(fileName), baseName_(name), minPt_(minPt) { config(); };   
   ~EfficiencyPlotter();
 
   void fill(triggeredMuonsIt & muon, 
@@ -20,9 +18,8 @@ public :
   
   void config();
   void plotAndSave();
-  void save() { outFile_->Write(); return ; };
   void printHisto(TCanvas * canvas, std::string tag) {  
-    canvas->SaveAs((std::string("plots/")+baseName_+"/"+baseName_+tag+".png").c_str());
+    canvas->SaveAs((std::string("results/plots/")+fileName_+"/"+baseName_+"/"+tag+".png").c_str());
     return;
   };
   float minMuPt() { return minPt_+10; };
@@ -31,6 +28,7 @@ public :
 protected :
 
   TFile* outFile_;
+  std::string fileName_;
   std::string baseName_;
   float minPt_;
 
@@ -56,7 +54,7 @@ void EfficiencyPlotter::config()
     {
       outFile_->mkdir(baseName_.c_str());
       outFile_->cd(baseName_.c_str());
-      system(string("mkdir -p plots/" + baseName_).c_str());
+      system(string("mkdir -p results/plots/" + fileName_ + "/" + baseName_).c_str());
     }
 
   string name  = "";
@@ -347,8 +345,6 @@ void EfficiencyPlotter::plotAndSave()
   
   printHisto(cEffvsVtx,"EffvsVtx");
   
-  save();
-
   return;
 
 }
@@ -357,7 +353,7 @@ void EfficiencyPlotter::plotAndSave()
 // Helper classfunction to plot togheter efficiency plots
 //////////////////////////////////////////////////////////
 
-void plotAndSaveAll(std::vector<EfficiencyPlotter*> & plotters, std::string plotName)
+void plotAndSaveAll(std::vector<EfficiencyPlotter*> & plotters, std::string baseName, std::string plotName)
 {
   
   TCanvas *canvas = new TCanvas(("c"+plotName).c_str(),
@@ -394,8 +390,8 @@ void plotAndSaveAll(std::vector<EfficiencyPlotter*> & plotters, std::string plot
       canvas->Update();
     }
   
-  system(string("mkdir -p plots/All/").c_str());
-  canvas->SaveAs(("plots/All/All"+plotName+".png").c_str());
+  system(string("mkdir -p results/plots/"+baseName).c_str());
+  canvas->SaveAs(("results/plots/" + baseName + "/" + plotName + ".png").c_str());
   
   return;
   

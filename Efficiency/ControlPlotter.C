@@ -10,8 +10,8 @@ class ControlPlotter
 
 public :
 
-  ControlPlotter(TFile* file, std::string name = "") : outFile_(file) , 
-						       baseName_(name) { config(); };   
+  ControlPlotter(TFile* file, std::string fileName , std::string name = "") : 
+    outFile_(file) , fileName_(fileName) , baseName_(name) { config(); };   
   ~ControlPlotter();
 
   void fillTight(TriggeredMuon & muon );  
@@ -22,10 +22,9 @@ public :
   void config();
   void plotAndSave();
 
-  void save() { outFile_->Write(); return ; };
   void printHisto(TCanvas * canvas, std::string tag) 
   {  
-    canvas->SaveAs((std::string("plots/")+baseName_+"/"+baseName_+tag+".png").c_str());
+    canvas->SaveAs((std::string("results/plots/")+fileName_+"/"+baseName_+"/"+tag+".png").c_str());
     return;
   };
   
@@ -33,6 +32,7 @@ public :
 protected :
 
   TFile* outFile_;
+  std::string fileName_;
   std::string baseName_;
 
 public :
@@ -53,7 +53,7 @@ void ControlPlotter::config()
     {
       outFile_->mkdir(baseName_.c_str());
       outFile_->cd(baseName_.c_str());
-      system(string("mkdir -p plots/" + baseName_).c_str());
+      system(string("mkdir -p results/plots/" + fileName_ + "/" + baseName_).c_str());
     }
 
   string name  = (baseName_ + "_hTrkHits");
@@ -198,8 +198,6 @@ void ControlPlotter::plotAndSave()
   hTH1_["hGmtDeltaEtaVsEta"]->GetYaxis()->SetTitleSize(0.04);
   
   printHisto(cGmtDeltaEta,"nGmtDeltaEta");
-
-  save();
 
   return;
 
