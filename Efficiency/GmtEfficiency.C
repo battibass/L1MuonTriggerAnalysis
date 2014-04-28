@@ -1,4 +1,5 @@
 #include "../../L1TriggerDPG/L1Ntuples/macros/L1Ntuple.h"
+#include "Configuration.C"
 #include "CommonUtils.C"
 #include "../CommonUtils/TriggeredMuon.C"
 #include "ControlPlotter.C"

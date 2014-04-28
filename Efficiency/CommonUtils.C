@@ -20,28 +20,9 @@
 
 #include "../CommonUtils/tdrstyle.C"
 
-// ******************************
-// Generic definitions
-// ******************************
-
-#define MAX_MU_GMT_DPHI .2
-#define MAX_MU_GMT_DETA .5
-
-#define MAX_MU_MU_DPHI .4
-#define MAX_MU_MU_DETA 1.
-
-#define MAX_MU_ETA 2.4
-
-enum EffCompType { COUNT_TNP, TWO_MUON_NO_TRIG, ONE_MUON_NO_TRIG };
-
-EffCompType effCompType = TWO_MUON_NO_TRIG;
-//EffCompType effCompType = COUNT_TNP;
-
-int gmtQualityMask[7] = {0, 0, 0, 1, 1, 1, 1}; // single mu qualities
-//int gmtQualityMask[7] = {0, 0, 1, 0, 1, 1, 1}; // double mu qualities
-
+// CB the color map for GMT qualities
 int colorMap[7] = {kYellow,kOrange+7,kRed,kBlue+1,
-		   kAzure+1,kCyan+1,kGreen+2}; // CB the color map for DTTF qualities
+		   kAzure+1,kCyan+1,kGreen+2}; 
 
 typedef std::pair<int,int> qualPair;
 typedef std::map<qualPair,int> qualToFine;

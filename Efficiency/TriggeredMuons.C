@@ -125,9 +125,6 @@ bool TriggeredMuons::runTriggerMatching(ControlPlotter* plots)
 
       TriggeredMuon bestCand(probeIt->my_mu,probeIt->my_imu,0,0);
 
-      //       if (abs(my_gmt->CandBx.at(iDt))>1) CB what to do with BX
-      // 	continue;
-      
       int nMatchedCands = 0;
 
       for (int iGmt=0; iGmt<my_gmt->N; ++iGmt)
