@@ -106,11 +106,9 @@ void plot( std::vector<TEfficiency*> plots,
 	  c->Update();
 
 	  std::string plotName = plots.at(iPlot)->GetName();
-	  float minY = plotName.find("EffVsPt") == std::string::npos ? 0.5 : 0.;
+	  float minY = plotName.find("EffVsPt") == std::string::npos ? 0.7 : 0.;
 	  float maxY = 1.1;
 
-	  std::cout << plotName << " " <<  minY << std::endl;
-	  
 	  plots.at(iPlot)->GetPaintedGraph()->GetYaxis()->SetRangeUser( minY, maxY );
 	  
 	}

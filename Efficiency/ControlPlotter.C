@@ -197,7 +197,7 @@ void ControlPlotter::plotAndSave()
   hTH1_["hGmtDeltaEtaVsEta"]->GetXaxis()->SetTitleSize(0.04);
   hTH1_["hGmtDeltaEtaVsEta"]->GetYaxis()->SetTitleSize(0.04);
   
-  printHisto(cGmtDeltaEta,"nGmtDeltaEta");
+  printHisto(cGmtDeltaEta,"nGmtDeltaEtavsEta");
 
   return;
 

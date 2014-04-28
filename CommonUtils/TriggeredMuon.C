@@ -25,10 +25,11 @@ public :
   bool  hasTriggerMatch() const  
   { 
     return fabs(deltaPhi()) < MAX_MU_GMT_DPHI &&
-           fabs(deltaEta()) < MAX_MU_GMT_DETA ; 
+           fabs(deltaEta()) < MAX_MU_GMT_DETA &&
+           hasGmtBX0(); 
   };
 
-  bool hasTriggerBX0() const
+  bool hasGmtBX0() const
   {
     return my_gmt != 0 && my_gmt->CandBx.at(my_igmt) == 0;
   }
