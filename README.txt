@@ -11,7 +11,7 @@ cmsenv
 
 git clone https://github.com/cms-l1-dpg/L1Ntuples.git L1TriggerDPG/L1Ntuples
 git clone https://github.com/cms-l1-dpg/L1Menu.git L1TriggerDPG/L1Menu
-git clone battibass/L1MuonTriggerAnalysis.git
+git clone https://github.com/battibass/L1MuonTriggerAnalysis.git
 
 scramv1 b -j 9
 
