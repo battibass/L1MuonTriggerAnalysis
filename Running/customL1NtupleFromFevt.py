@@ -12,3 +12,7 @@ process.l1MuonRecoTreeProducer.triggerMatching = True
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 readFiles.extend( ['file:///data2/battilan/L1Trigger/62X_RAW_RECO.root'] )
+
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.threshold = 'ERROR'
+

@@ -4,6 +4,7 @@ from subprocess import call, Popen, PIPE
 import sys
 
 eosCmd = '/afs/cern.ch/project/eos/installation/0.3.4/bin/eos.select'
+#eosBaseDir = "/eos/cms/store/user/battilan/L1Trigger/L1MuonRates2015/" 
 eosBaseDir = "/eos/cms/store/user/battilan/L1Trigger/L1Muon2015/" 
 
 
@@ -16,7 +17,7 @@ def eosFindDirs( basePath ) :
     
     if eosFindCmd.returncode == 0 :
         for line in stdout.split("\n") :
-            if len(line) > 0 : # CB minor hack I want just v4
+            if len(line) > 0 :
                 dirs.append(line)
     else :
         print "Error in eosFindDirs"
@@ -44,8 +45,8 @@ def eosGetFiles ( path ) :
 def eosCopy ( inputFile, outputPath ) :
 
     #print outputPath
-    #print '/afs/cern.ch/project/eos/installation/0.3.4/bin/eos.select cp ' + inputFile + " " + outputPath
-    call([eosCmd + ' cp ' + inputFile + " " + outputPath], shell=True)
+    print '/afs/cern.ch/project/eos/installation/0.3.4/bin/eos.select cp ' + inputFile + " " + outputPath
+    #call([eosCmd + ' cp ' + inputFile + " " + outputPath], shell=True)
 
 
 def mkDir( path ) :
