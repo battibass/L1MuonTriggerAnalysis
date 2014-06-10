@@ -60,9 +60,10 @@ void EfficiencyPlotter::config()
   string name  = "";
   string title = "";
 
-  string tag[4] = { "", "Barrel", "Overlap", "Endcap" };
+  string tag[8] = { "", "Barrel", "Overlap", "Endcap" ,
+		    "TurnOn", "TurnOnBarrel", "TurnOnOverlap", "TurnOnEndcap" };
 
-  for (int iTag=0; iTag<4; ++iTag)
+  for (int iTag=0; iTag<8; ++iTag)
     {
       name = baseName_ + "_hGmtPtVsQual" + tag[iTag];
       title = name + ";tight muon p_{t} [GeV/c];efficiency";
@@ -115,13 +116,16 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
 
   bool hasTrigger = muon->hasTriggerMatch() &&                  
     ((muon->my_gmt->Pt.at(muon->my_igmt)) +0.01 > minPt_);
+
+  bool hasTriggerNoPt = muon->hasTriggerMatch();
  
   int   gmtQual      = 999;
   
   if (muon->hasTriggerMatch()) 
     {
       gmtQual = muon->my_gmt->Qual.at(muon->my_igmt);
-      hasTrigger = hasTrigger && gmtQualityMask[gmtQual-1];
+      hasTrigger     = hasTrigger && gmtQualityMask[gmtQual-1];
+      hasTriggerNoPt = hasTriggerNoPt && gmtQualityMask[gmtQual-1];
     }
   
   if (fabs(eta) < MAX_MU_ETA)
@@ -140,6 +144,9 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
 	}
 
       histos_["hEffVsPt"]->Fill(hasTrigger,pt);
+
+      if (hasTriggerNoPt)
+	histos_["hEffVsPtTurnOn"]->Fill(hasTrigger,pt);
       
       if (hasTrigger) 
 	{
@@ -149,6 +156,9 @@ void EfficiencyPlotter::fill(triggeredMuonsIt & muon,
       if (iEta >=0)
        	{	  
        	  histos_["hEffVsPt"+tag[iEta]]->Fill(hasTrigger,pt);
+
+	  if (hasTriggerNoPt)
+	    histos_["hEffVsPtTurnOn"+tag[iEta]]->Fill(hasTrigger,pt);
 	  
        	  if (hasTrigger) 
        	    {
@@ -196,9 +206,10 @@ void EfficiencyPlotter::plotAndSave()
   setTDRStyle();
   gStyle->SetOptTitle(0);
 
-  string tag[4] = { "", "Barrel", "Overlap", "Endcap" };
+  string tag[8] = { "", "Barrel", "Overlap", "Endcap",
+		    "TurnOn", "TurnOnBarrel", "TurnOnOverlap", "TurnOnEndcap" };
   
-  for (int iTag=0; iTag<4; ++iTag)
+  for (int iTag=0; iTag<8; ++iTag)
     {
       TCanvas *cEffvsPt = new TCanvas((baseName_+"cEffvsPt"+tag[iTag]).c_str(),
 				      (baseName_+"cEffvsPt"+tag[iTag]).c_str(),500,500);
