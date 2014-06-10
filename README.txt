@@ -19,9 +19,12 @@ scramv1 b -j 9
 
 (2) How to run ntuple production in CRAB
 
-There is already a multicrab.cfg template in:
+There are already two multicrab.cfg template in:
 
-L1MuonTriggerAnalysis/Running/crab/multicrab.cfg
+L1MuonTriggerAnalysis/Running/crab/multicrab_efficiency.cfg
+L1MuonTriggerAnalysis/Running/crab/multicrab_rate.cfg
+
+they are setup to run on efficiency or rate samples
 
 Look at the .py cfg it uses and try to customise it for what you 
 need to do.
